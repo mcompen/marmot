@@ -125,7 +125,7 @@
 		await auth.checkAnonymousMode();
 		checkingAnonymousMode = false;
 
-		if (browser && $auth) {
+		if (browser && $auth && !$page.url.pathname.startsWith('/login')) {
 			isAdmin = auth.hasRole('admin');
 			userProfile.load();
 		}
