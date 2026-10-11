@@ -14,6 +14,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/marmotdata/marmot/internal/metrics"
 	"github.com/marmotdata/marmot/internal/query"
+	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -1066,20 +1067,7 @@ func (r *PostgresRepository) executeMetadataMatchRule(ctx context.Context, rule 
 	var condition string
 	var args []interface{}
 
-	fieldPath := strings.Split(*rule.MetadataField, ".")
-	var columnRef string
-	if len(fieldPath) > 1 {
-		jsonPath := ""
-		for i, field := range fieldPath[:len(fieldPath)-1] {
-			if i > 0 {
-				jsonPath += "->"
-			}
-			jsonPath += fmt.Sprintf("'%s'", field)
-		}
-		columnRef = fmt.Sprintf("metadata->%s->>'%s'", jsonPath, fieldPath[len(fieldPath)-1])
-	} else {
-		columnRef = fmt.Sprintf("metadata->>'%s'", fieldPath[0])
-	}
+	columnRef := query.MetadataColumnRef(*rule.MetadataField)
 
 	switch *rule.PatternType {
 	case PatternTypeExact:
@@ -1144,10 +1132,12 @@ func (r *PostgresRepository) PreviewRule(ctx context.Context, rule *RuleInput, l
 	assetIDs, err := r.ExecuteRule(ctx, tempRule)
 	if err != nil {
 		r.recorder.RecordDBQuery(ctx, "dataproduct_preview_rule", time.Since(start), false)
+		// Database error text can echo row values, so it is logged rather than returned to the caller.
+		log.Warn().Err(err).Msg("Failed to execute data product rule preview")
 		return &RulePreview{
 			AssetIDs:   []string{},
 			AssetCount: 0,
-			Errors:     []string{err.Error()},
+			Errors:     []string{"failed to evaluate rule"},
 		}, nil
 	}
 

@@ -71,6 +71,9 @@ frontend-lint:
 frontend-typecheck:
 	cd web/marmot && pnpm install && pnpm run check
 
+frontend-i18n-check:
+	cd web/marmot && pnpm install && pnpm run i18n:check
+
 fix:
 	cd web/marmot && pnpm run format
 
@@ -150,7 +153,14 @@ sdk-py-lint: sdk-py-install
 	cd $(SDK_PY_DIR) && uv run ruff format --check .
 	cd $(SDK_PY_DIR) && uv run mypy src/marmot
 	cd $(SDK_PY_DIR) && uv run mypy examples
-	cd $(SDK_PY_DIR) && uv run pip-audit --skip-editable
+	@cd $(SDK_PY_DIR) && for attempt in 1 2 3; do \
+		if uv run pip-audit --skip-editable; then exit 0; fi; \
+		if [ "$$attempt" -lt 3 ]; then \
+			echo "pip-audit attempt $$attempt failed, retrying in $$((attempt * 10))s"; \
+			sleep $$((attempt * 10)); \
+		fi; \
+	done; \
+	echo "pip-audit failed after 3 attempts" >&2; exit 1
 
 sdk-py-test: sdk-py-install
 	cd $(SDK_PY_DIR) && uv run pytest

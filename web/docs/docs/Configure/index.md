@@ -8,6 +8,12 @@ import { DocCard, DocCardGrid } from '@site/src/components/DocCard';
 
 <DocCardGrid>
   <DocCard
+    title="Users, roles and access"
+    description="Roles, permissions, teams, service accounts and API keys"
+    docId="Configure/access-control"
+    icon="mdi:shield-key"
+  />
+  <DocCard
     title="Authentication"
     description="Set up SSO with Google, GitHub, GitLab, Okta, Slack or Auth0"
     docId="Configure/Authentication/index"
@@ -36,6 +42,12 @@ import { DocCard, DocCardGrid } from '@site/src/components/DocCard';
     description="Enhance search with deep fuzzy matching across all fields"
     docId="Configure/elasticsearch"
     icon="mdi:magnify"
+  />
+  <DocCard
+    title="Translations"
+    description="Set the interface language and contribute new translations"
+    docId="Develop/translations"
+    icon="mdi:translate"
   />
 </DocCardGrid>
 
@@ -144,7 +156,7 @@ Single Sign-On providers are configured under `auth.<provider>`, where `<provide
 | `auth.<provider>.team_sync`      | Synchronise team membership from provider groups   | disabled           |
 | `auth.<provider>.group_mapping`  | Map provider groups to Marmot roles                | -                  |
 
-Each provider has its own options and setup steps — see [Authentication](./Authentication/index.md) for the per-provider guides.
+Each provider has its own options and setup steps. See [Authentication](./Authentication/index.md) for the per-provider guides.
 
 ## Search
 
@@ -152,7 +164,7 @@ Each provider has its own options and setup steps — see [Authentication](./Aut
 | ---------------- | ------------------------------- | ------- |
 | `search.timeout` | Search query timeout in seconds | `10`    |
 
-The optional Elasticsearch backend is configured under `search.elasticsearch` — see [Elasticsearch](./elasticsearch.md) for the full list of options.
+The optional Elasticsearch backend is configured under `search.elasticsearch`. See [Elasticsearch](./elasticsearch.md) for the full list of options.
 
 ## Metrics
 
@@ -204,6 +216,14 @@ The optional Elasticsearch backend is configured under `search.elasticsearch` �
 | `ui.banner.id`          | Identifier used to remember dismissals    | `banner-1` |
 
 See [Customisable Banner](./banner.md) for examples.
+
+## UI Language
+
+| Key                   | Description                                                             | Default |
+| --------------------- | ----------------------------------------------------------------------- | ------- |
+| `ui.default_language` | Language tag for visitors with no preference, empty detects the browser | -       |
+
+See [Translations](../Develop/translations.md) for the available languages and how to contribute one.
 
 ## Telemetry
 

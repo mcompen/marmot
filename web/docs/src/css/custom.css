@@ -1187,6 +1187,37 @@ html[data-theme="dark"] .hub-pulse {
   animation-delay: 1.2s;
 }
 
+/* ============================================
+   Narrow-screen navbar
+   ============================================ */
+
+/* As on cloud.marmotdata.io, only links that leave Marmot get the external
+   arrow. Cloud, Pricing, Sign in and Start free are all Marmot. Labels never
+   wrap. */
+.navbar__items
+  .navbar__link[href^="https://cloud.marmotdata.io"]
+  svg[class*="iconExternalLink"] {
+  display: none;
+}
+
+.navbar__items .navbar__link {
+  white-space: nowrap;
+}
+
+/* Between the hamburger breakpoint and a full desktop width, the links
+   tighten up and search shrinks to its icon so the header stays one row. */
+@media (min-width: 997px) and (max-width: 1279px) {
+  .navbar__items .navbar__link {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .navbar__items--right .DocSearch-Button-Placeholder,
+  .navbar__items--right .DocSearch-Button-Keys {
+    display: none;
+  }
+}
+
 @media (max-width: 996px) {
   .navbar__items--right {
     display: flex !important;
@@ -2263,6 +2294,226 @@ html[data-theme="dark"] .DocSearch-Button:hover {
   color: #9ca3af !important;
 }
 
+/* ============================================
+   Marmot Cloud
+
+   Preflight is off, so every line in here is declared rather than left to a
+   Tailwind `border-*` utility.
+   ============================================ */
+
+/* The launch banner that sits above the navbar. */
+div[class*="announcementBar_"] {
+  --docusaurus-announcement-bar-height: 2.5rem;
+  background: linear-gradient(90deg, #b34822 0%, #d25a30 50%, #e86f42 100%);
+  color: #fff;
+  font-weight: 500;
+  border-bottom: none;
+}
+
+div[class*="announcementBar_"] button[class*="announcementBarClose"] {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cloud-announcement {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
+}
+
+.cloud-announcement a {
+  color: #fff;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+
+.cloud-announcement a:hover {
+  color: #fff;
+  opacity: 0.85;
+}
+
+.cloud-announcement-tag {
+  padding: 0.0625rem 0.4375rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* On phones, drop the tag and the trailing sentence so the bar stays one line. */
+@media (max-width: 640px) {
+  .cloud-announcement-tag,
+  .cloud-announcement-more {
+    display: none;
+  }
+}
+
+/* The Start free button in the navbar. */
+.cloud-button {
+  background: linear-gradient(135deg, #d25a30 0%, #e86f42 100%) !important;
+  color: white !important;
+  padding: 0.4rem 1.1rem !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  letter-spacing: -0.01em;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border: none !important;
+  box-shadow: 0 1px 3px rgba(210, 90, 48, 0.2);
+  margin-right: 0 !important;
+}
+
+.cloud-button:hover {
+  background: linear-gradient(135deg, #c04e28 0%, #d25a30 100%) !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(210, 90, 48, 0.25) !important;
+}
+
+html[data-theme="dark"] .cloud-button {
+  background: linear-gradient(135deg, #e86f42 0%, #f7885e 100%) !important;
+  box-shadow: 0 1px 3px rgba(232, 111, 66, 0.3);
+}
+
+html[data-theme="dark"] .cloud-button:hover {
+  background: linear-gradient(135deg, #d25a30 0%, #e86f42 100%) !important;
+  box-shadow: 0 4px 12px rgba(232, 111, 66, 0.3) !important;
+}
+
+/* Sign in stays plain text beside the button, so only one thing in the
+   header reads as the main action. */
+.signin-link {
+  font-weight: 500;
+}
+
+@media (max-width: 996px) {
+  .cloud-button {
+    display: inline-flex !important;
+    padding: 0.35rem 0.9rem !important;
+    font-size: 0.8rem !important;
+    margin-left: 0.5rem !important;
+  }
+
+  .navbar__item.navbar__link.cloud-button {
+    display: inline-flex !important;
+  }
+
+  /* Below this width the header cannot hold both. Keep the button and hide
+     Sign in, which is still reachable from the sidebar menu. */
+  .navbar__items--right .signin-link {
+    display: none !important;
+  }
+}
+
+/* Once the hamburger menu shows, DocSearch is positioned absolutely against
+   the right edge. Search shrinks to its icon and the right-hand group stops
+   short of it, or the button and GitHub end up underneath. */
+@media (max-width: 996px) {
+  .navbar__items--right {
+    padding-right: 2.75rem;
+  }
+
+  .navbar__search .DocSearch-Button-Placeholder,
+  .navbar__search .DocSearch-Button-Keys,
+  [class*="navbarSearchContainer"] .DocSearch-Button-Placeholder,
+  [class*="navbarSearchContainer"] .DocSearch-Button-Keys {
+    display: none;
+  }
+}
+
+/* At phone widths GitHub goes as well, since the sidebar menu already has
+   it. */
+@media (max-width: 640px) {
+  .navbar__items--right .header-github-link {
+    display: none !important;
+  }
+
+  .cloud-button {
+    flex-shrink: 0;
+    padding: 0.3rem 0.75rem !important;
+    font-size: 0.75rem !important;
+    margin-left: 0.25rem !important;
+  }
+}
+
+/* The header bar already shows the button, so hide the sidebar copy. */
+.navbar-sidebar .cloud-button {
+  display: none !important;
+}
+
+/* --- The small pill link that sits above the hero headline --- */
+
+.cloud-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.375rem 0.375rem 0.375rem 0.875rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(210, 90, 48, 0.28);
+  background: rgba(255, 255, 255, 0.75);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.cloud-pill:hover {
+  border-color: rgba(210, 90, 48, 0.5);
+  color: #4b5563;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+html[data-theme="dark"] .cloud-pill {
+  border-color: rgba(247, 136, 94, 0.3);
+  background: rgba(46, 46, 46, 0.6);
+  color: #d1d5db;
+}
+
+html[data-theme="dark"] .cloud-pill:hover {
+  border-color: rgba(247, 136, 94, 0.55);
+  color: #d1d5db;
+}
+
+.cloud-pill-tag {
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(210, 90, 48, 0.12);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #b34822;
+}
+
+html[data-theme="dark"] .cloud-pill-tag {
+  background: rgba(247, 136, 94, 0.16);
+  color: #f7885e;
+}
+
+.cloud-pill-arrow {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-right: 0.375rem;
+  color: #b34822;
+  transition: transform 0.2s ease;
+}
+
+.cloud-pill:hover .cloud-pill-arrow {
+  transform: translateX(2px);
+}
+
+html[data-theme="dark"] .cloud-pill-arrow {
+  color: #f7885e;
+}
+
 /* --- Legal page tables --- */
 
 /* Tailwind's prose styles remove the horizontal padding from a table's first
@@ -2284,7 +2535,7 @@ html[data-theme="dark"] .DocSearch-Button:hover {
   gap: 0.5rem 1.5rem;
   /* Matches the max-w-3xl paragraph above it. */
   max-width: 48rem;
-  margin: 3.5rem auto 0;
+  margin: 2rem auto 0;
   padding-top: 1.5rem;
   border-top: 1px solid rgba(123, 89, 53, 0.16);
 }
@@ -2295,28 +2546,34 @@ html[data-theme="dark"] .DocSearch-Button:hover {
   background: rgba(123, 89, 53, 0.2);
 }
 
-.gfs {
-  display: inline-flex;
+.supported-by {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  margin: 2.5rem auto 0;
 }
 
-.gfs-mark {
-  width: 1.0625rem;
-  height: 1.0625rem;
-  flex-shrink: 0;
-}
-
-.gfs-text {
-  font-size: 0.8125rem;
-  font-weight: 400;
-  color: #8a8078;
-  white-space: nowrap;
-}
-
-.gfs-text strong {
+.supported-by-label {
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: #3f3a35;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a8078;
+}
+
+.supported-by-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 2.25rem;
+}
+
+/* The badge files are NVIDIA's official artwork with the white panel removed, plus a dark-mode copy with the black linework and wordmark flipped to white. */
+.supported-by-badge {
+  height: 3rem;
+  width: auto;
 }
 
 .proof-fact-link {
@@ -2367,12 +2624,11 @@ html[data-theme="dark"] .proof-sep {
   background: rgba(255, 255, 255, 0.12);
 }
 
-html[data-theme="dark"] .gfs-text,
+html[data-theme="dark"] .supported-by-label,
 html[data-theme="dark"] .proof-label {
   color: #8b8783;
 }
 
-html[data-theme="dark"] .gfs-text strong,
 html[data-theme="dark"] .proof-value,
 html[data-theme="dark"] .proof-claim {
   color: #e5e2df;
@@ -2400,12 +2656,7 @@ html[data-theme="dark"] .proof-fact-link:focus-visible {
     padding-top: 1.25rem;
   }
 
-  .gfs {
-    flex-basis: 100%;
-    justify-content: center;
-  }
-
-  .proof-row > .gfs + .proof-sep {
-    display: none;
+  .supported-by {
+    margin-top: 2rem;
   }
 }
